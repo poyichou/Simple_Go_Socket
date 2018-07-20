@@ -6,22 +6,24 @@
 	* connection time  
 	* online or offline  
 * Receive message sent from every client  
-	* if the message contains "list":  
-		send client history to the client  
+	* If the message contains "list":  
+		Send client history to the client  
 		format:  
+		```bash
 		======== Client history ========  
 		Client: [address] | Connection time: [time] | [online|offline][ <- you|]   
 		...  
 		======== Online Client: [number] ========  
-	* otherwise:  
-		sent "Received: " + [received message] to the client  
+		```
+	* Otherwise:  
+		Sent "Received: " + [received message] to the client  
 ## Client:  
 * Connect to server  
 * Deal with two event with select:  
-	* local input:  
+	* Local input:  
 		* if it is "exit", close the connection and return  
 		* otherwise, send it to the server  
-	* message from the server:  
+	* Message from the server:  
 		simply print out to screen  
 
 ## To run:  

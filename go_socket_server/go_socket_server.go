@@ -29,11 +29,9 @@ func offlineClient(conn net.Conn) {
 	clients.mux.Lock()
 	if info, ok := clients.infos[conn.RemoteAddr().String()]; ok {
 		// update to offline
-		t := info.connTime
-		delete(clients.infos, conn.RemoteAddr().String())
-		clients.infos[conn.RemoteAddr().String()] = Info{false, t}
+		clients.infos[conn.RemoteAddr().String()] = Info{false, info.connTime}
+		clients.count--
 	}
-	clients.count--
 	clients.mux.Unlock()
 }
 

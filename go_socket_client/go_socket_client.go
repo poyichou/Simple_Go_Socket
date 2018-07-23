@@ -40,7 +40,7 @@ func receiveData(conn net.Conn) {
 func scanf_send() {
 	var str string
 	for {
-		fmt.Scanf("%s", &str)
+		fmt.Scanf("%s\n", &str)
 		loch <-str
 	}
 }

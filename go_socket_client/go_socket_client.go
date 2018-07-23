@@ -73,26 +73,27 @@ func main() {
 	go scanf_send()
 	go receiveData(conn)
 	var str string
-	for {
+	for quit := 0; quit == 0; {
 		select {
-			case str = <-rech:
-				// receive from socket
-				if strings.Compare(str, "") == 0 {
-					conn.Close()
-					return
-				} else {
-					fmt.Println(str)
-				}
-			case str = <-loch:
-				// receive from scanf
-				if strings.Compare(str, "exit") == 0 {
-					conn.Close()
-					fmt.Println("connectiion closed")
-					return
-				} else {
-					conn.Write([]byte(str))
-				}
-
+		case str = <-rech:
+			// receive from socket
+			if strings.Compare(str, "") == 0 {
+				quit = 1
+			} else {
+				fmt.Println(str)
+			}
+		case str = <-loch:
+			// receive from scanf
+			if strings.Compare(str, "exit") == 0 {
+				defer fmt.Println("connectiion closed")
+				quit = 1
+			} else {
+				// send to server
+				conn.Write([]byte(str))
+			}
 		}
 	}
+	conn.Close()
+	close(loch)
+	close(rech)
 }

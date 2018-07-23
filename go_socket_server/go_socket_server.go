@@ -54,19 +54,17 @@ func displayClients(conn net.Conn) {
 	clients.mux.Lock()
 	result := "======== Client history ========\n"
 	for addr, info := range clients.infos {
-		strformat := "Client: %s | connection time: %v | "
-		timeformat := "2006-01-02 15:04:05"
+		var indicator string
 		if info.online {
-			var indicator string
 			if strings.Compare(addr, conn.RemoteAddr().String()) == 0 {
 				indicator = "online <- you\n"
 			} else {
 				indicator = "online\n"
 			}
-			result += fmt.Sprintf(strformat + indicator, addr, info.connTime.Format(timeformat))
 		} else {
-			result += fmt.Sprintf(strformat + "offline\n", addr, info.connTime.Format(timeformat))
+			indicator = "offline\n"
 		}
+		result += fmt.Sprintf("Client: %s | connection time: %v | " + indicator, addr, info.connTime.Format("2006-01-02 15:04:05"))
 	}
 	result += fmt.Sprintf("======== Online clients: %d ========\n", clients.count)
 	conn.Write([]byte(result))

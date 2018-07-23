@@ -56,15 +56,14 @@ func displayClients(conn net.Conn) {
 	for addr, info := range clients.infos {
 		var indicator string
 		if info.online {
+			indicator = "online"
 			if strings.Compare(addr, conn.RemoteAddr().String()) == 0 {
-				indicator = "online <- you\n"
-			} else {
-				indicator = "online\n"
+				indicator += " <- you"
 			}
 		} else {
-			indicator = "offline\n"
+			indicator = "offline"
 		}
-		result += fmt.Sprintf("Client: %s | connection time: %v | " + indicator, addr, info.connTime.Format("2006-01-02 15:04:05"))
+		result += fmt.Sprintf("Client: %s | connection time: %v | " + indicator + "\n", addr, info.connTime.Format("2006-01-02 15:04:05"))
 	}
 	result += fmt.Sprintf("======== Online clients: %d ========\n", clients.count)
 	conn.Write([]byte(result))

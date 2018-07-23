@@ -40,6 +40,7 @@ func receiveData(conn net.Conn) {
 func scanf_send() {
 	var str string
 	for {
+		// fmt.Scanf("%s", &str) would return twice for one input on Win 10
 		fmt.Scanf("%s\n", &str)
 		loch <-str
 	}
@@ -72,17 +73,16 @@ func main() {
 	}
 	go scanf_send()
 	go receiveData(conn)
-	var str string
 	for quit := 0; quit == 0; {
 		select {
-		case str = <-rech:
+		case str := <-rech:
 			// receive from socket
 			if strings.Compare(str, "") == 0 {
 				quit = 1
 			} else {
 				fmt.Println(str)
 			}
-		case str = <-loch:
+		case str := <-loch:
 			// receive from scanf
 			if strings.Compare(str, "exit") == 0 {
 				defer fmt.Println("connectiion closed")

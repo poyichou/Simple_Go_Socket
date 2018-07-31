@@ -21,6 +21,7 @@ func receiveData(conn net.Conn) {
 			if err == io.EOF {
 				// connection closed by server
 				log.Println(conn.RemoteAddr().String(), " connection closed by server")
+				rech<-""
 			} else if ! strings.HasSuffix(err.Error(), "use of closed network connection") {
 				/*
 				conn might be closed by other goroutine, which make Read() return error
@@ -29,8 +30,8 @@ func receiveData(conn net.Conn) {
 				*/
 				// other error
 				log.Println(conn.RemoteAddr().String(), "connection error:", err)
+				rech<-""
 			}
-			rech<-""
 			return
 		}
 		rech <- string(buffer[:n])
